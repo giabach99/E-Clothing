@@ -1,8 +1,10 @@
 import { useState,} from "react";
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component";
 import './sign-up-form.styles.scss';
+
+import { useDispatch } from "react-redux";
+import { signUpStart } from "../../store/user/user.action";
 
 
 
@@ -15,7 +17,8 @@ const defaultFormFields = {
 
 const SignUpForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const {displayName, email, password, confirmedPassword} = formFields;    
+    const {displayName, email, password, confirmedPassword} = formFields;
+    const dispatch = useDispatch();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -24,9 +27,10 @@ const SignUpForm = () => {
             return;
         }
         try {
-            const {user} = await createAuthUserWithEmailAndPassword(email, password);            
+            dispatch(signUpStart(email, password, displayName));
+            // const {user} = await createAuthUserWithEmailAndPassword(email, password);            
             
-            await createUserDocumentFromAuth(user, {displayName});
+            // await createUserDocumentFromAuth(user, {displayName});
             resetFormFields();
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
