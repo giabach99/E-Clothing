@@ -2,6 +2,8 @@ import { AnyAction } from "redux";
 import { CartItem } from "./cart.types";
 import { setCartItems, setIsCartOpen } from "./cart.action";
 
+import { signOutSuccess } from "../user/user.action";
+
 export type CartState = {
     readonly isCartOpen: boolean;
     readonly cartItems: CartItem[];
@@ -23,6 +25,14 @@ export const cartReducer = (state=INITIAL_STATE, action: AnyAction): CartState=>
         return {
             ...state,
             cartItems: action.payload,
+        }
+    }
+
+    if(signOutSuccess.match(action)){
+        return {
+            ...state,
+            cartItems: [],
+            isCartOpen: false,
         }
     }
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import Home from "./routes/home/home.component";
@@ -18,6 +18,12 @@ const App = () => {
   const user = useSelector(selectCurrentUser);
   const navigate = useNavigate();
 
+  useEffect(() => {    
+    if (user){
+      return navigate("/");
+    }
+  }, [user]);
+
   useEffect(() => {
         dispatch(checkUserSession());
         // const unsubscribe = onAuthStateChangedListener((user) => {
@@ -28,16 +34,12 @@ const App = () => {
         // })
 
         // return unsubscribe;
-    }, [])
+  }, [])
 
-    useEffect(() => {
-      if (user){
-         return navigate("/");
-      }
-      else {
-        return navigate("/auth");
-      }
-   },[user]);
+  
+
+  
+  
 
 
   return (
